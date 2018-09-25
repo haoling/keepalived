@@ -115,7 +115,7 @@ config_keepalived() {
  if [[ -n "$KEEPALIVED_NOTIFY_SCRIPT" ]]; then
    {
      echo 'notify "'"$KEEPALIVED_NOTIFY_SCRIPT"'"'
-   }
+   } >> "$KEEPALIVED_CONF"
  fi
 
   echo '}' >> "$KEEPALIVED_CONF"
