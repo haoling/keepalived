@@ -21,6 +21,7 @@ config_keepalived() {
   KEEPALIVED_VIRTUAL_ROUTER_ID=${KEEPALIVED_VIRTUAL_ROUTER_ID:-1}
   KEEPALIVED_ADVERT_INT=${KEEPALIVED_ADVERT_INT:-1}
   KEEPALIVED_AUTH_PASS=${KEEPALIVED_AUTH_PASS:-"pwd$KEEPALIVED_VIRTUAL_ROUTER_ID"}
+  KEEPALIVED_NOTIFY_SCRIPT=${KEEPALIVED_NOTIFY_SCRIPT:-/usr/lib/keepalived/scripts/notify.sh}
 
   if [[ ! $KEEPALIVED_UNICAST_SRC_IP ]]; then
     bind_target="$(ip addr show "$KEEPALIVED_INTERFACE" | \
@@ -109,6 +110,12 @@ config_keepalived() {
      echo '    chk_kube_apiserver'
      echo '  }'
    } >> "$KEEPALIVED_CONF"
+ fi
+
+ if [[ -n "$KEEPALIVED_NOTIFY_SCRIPT" ]]; then
+   {
+     echo 'notify "'"$KEEPALIVED_NOTIFY_SCRIPT"'"'
+   }
  fi
 
   echo '}' >> "$KEEPALIVED_CONF"
